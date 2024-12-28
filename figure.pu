@@ -1,0 +1,67 @@
+@startuml del_proc
+autonumber 1.1
+script --> config.toml: load_config()
+script <-- config.toml: username,password
+autonumber 2.1
+script --> airstation: login(username,password)
+script <-- airstation: config_page
+script --> airstation: transit_page()
+script <-- airstation: mac_list
+loop mac_list
+hnote over script: matching mac address
+end
+autonumber 3.1
+script --> airstation: delete
+airstation --> script: response
+script --> airstation: logout()
+@enduml
+
+@startuml del_func
+start
+:load_config();
+if (login()) is (True) then
+:page_transit();
+:get_mac_list();
+if (mac in maclist) is (True) then
+:delete_mac(hostname);
+endif;
+:logout();
+endif;
+end
+@enduml
+
+@startuml add_func
+start
+:load_config();
+if (login()) is (True) then
+:page_transit();
+:get_mac_list();
+if (mac in maclist) is (True) then
+else
+:add_mac(hostname);
+endif;
+:logout();
+endif;
+end
+@enduml
+
+@startuml usecase
+left to right direction
+title ユースケース図
+actor USER as u
+rectangle slack {
+    usecase MACADDRを削除 as del
+    usecase MACADDRを追加 as add
+}
+rectangle system {
+    actor TIMER as t
+    usecase "delete_mac()" as del_func
+    usecase "add_mac()" as add_func
+}
+u --> del: "@bot del hostname"
+u --> add: "@bot add hostname"
+del --> del_func
+add --> add_func
+del_func <-- t
+add_func <-- t
+@enduml
