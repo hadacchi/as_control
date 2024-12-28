@@ -11,17 +11,17 @@ AirStation WSR-A2533DHP3 の設定変更ページを操作するスクリプト
 
 ## ユースケース図
 
-![](out/figure/usecase.svg)
+![](out/figure/usecase.png)
 
 ## シーケンス図
 
 削除シーケンス
-![](out/figure/del_func.svg)
+![](out/figure/del_func.png)
 
 追加シーケンス
-![](out/figure/add_func.svg)
+![](out/figure/add_func.png)
 
 ## フローチャート
 
 del_func
-![](out/figure/del_proc.svg)
+![](out/figure/del_proc.png)
