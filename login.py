@@ -15,6 +15,7 @@ from selenium.webdriver.common.by import By
 import toml
 
 
+
 def get_url(host, page):
     return '/'.join(['http:/',host,page])
 
@@ -29,6 +30,7 @@ logger.setLevel(loglevel)
 handler = logging.StreamHandler(sys.stderr)
 handler.setFormatter(formatter)
 logger.addHandler(handler)
+
 
 #
 logger.info('chromedriver setup')
@@ -100,7 +102,7 @@ button = driver.find_element(By.ID, 'label_t7_mac_reg')
 logger.info('get mac addr')
 mac_list = []
 for td in driver.find_elements(By.CSS_SELECTOR, '#id_reg_list > tbody > tr > td'):
-    logger.info(td.text.rstrip())
+    #logger.info(td.text.rstrip())
     mac_list.append(td.text.rstrip())
 
 fix_button = driver.find_element(By.CSS_SELECTOR, '#mac_status0 > input[value="修正"]')
