@@ -9,11 +9,20 @@ AirStation WSR-A2533DHP3 の設定変更ページを操作するスクリプト
 - システムはホスト名とMacアドレスの対応表を持つ
 - システムはホストの登録状況を確認しエラーを起こさないよう指示を実行する
 
+## ページ遷移
+
+AirStationのページ遷移は以下を想定する．
+
+![](out/figure/page_transition.png)
+
 ## ユースケース図
 
 ![](out/figure/usecase.png)
 
 ## シーケンス図
+
+デバイスリスト保存
+![](out/figure/get_device_list.png)
 
 削除シーケンス
 ![](out/figure/del_func.png)
