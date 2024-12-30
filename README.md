@@ -2,6 +2,13 @@
 
 AirStation WSR-A2533DHP3 の設定変更ページを操作するスクリプト
 
+## TODO
+
+次にやること
+
+- loggerのログを整理．常にログに残すinfo，警告のwarning，デバッグの時にだけ使うdebug
+- 遷移図，シーケンス図のアップデート
+
 ## 要件
 
 - slackをUIとする
