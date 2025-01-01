@@ -1,4 +1,4 @@
-# ap-control
+# as_control
 
 AirStation WSR-A2533DHP3 の設定変更ページを操作するスクリプト
 
