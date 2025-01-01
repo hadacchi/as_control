@@ -12,6 +12,7 @@ AirStation WSR-A2533DHP3 の設定変更ページを操作するスクリプト
 ## 要件
 
 - slackをUIとする
+    - [slack-companion](https://github.com/hadacchi/slack-companion)からロードすることで解決する
 - slackでbotを指定して add/del ホスト名 を指定すると，システムが airstation の設定画面を操作し，設定変更後，ログアウトする
 - システムはホスト名とMacアドレスの対応表を持つ
 - システムはホストの登録状況を確認しエラーを起こさないよう指示を実行する

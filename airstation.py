@@ -6,7 +6,7 @@ import csv
 import logging
 
 from selenium import webdriver
-from selenium.webdriver import Chrome, ChromeOptions
+from selenium.webdriver import Chrome, ChromeOptions, Remote
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -46,7 +46,8 @@ class AirStationWebsite():
         chromedriver_options.add_argument('--headless')
         chromedriver_options.add_argument('--disable-gpu')
         del(self.driver)
-        self.driver = webdriver.Chrome(service=Service(),options=chromedriver_options)
+        #self.driver = webdriver.Chrome(service=Service(),options=chromedriver_options)
+        self.driver = webdriver.Remote(command_executor=os.environ['SELENIUM_URL'], options=chromedriver_options)
 
     def _is_enabled(self):
         '''driver is exists or not
