@@ -71,7 +71,7 @@ class AirStationWebsite():
         '''
         # MACアドレスの正規表現パターン
         pattern = r'^([0-9A-Fa-f]{2}[:]){5}[0-9A-Fa-f]{2}$'
-        
+
         # 正規表現で判定
         return bool(re.match(pattern, macaddr))
 
@@ -160,12 +160,8 @@ class AirStationWebsite():
                     panel = self.driver.find_element(By.ID, f'dev{j}_{i}')
                 except:
                     raise Exception(f'cannot find dev{j}_{i} info')
-                #except NoSuchElementException:
-                #    # タイムアウトか，ログイン状態維持か判定
-                #    self.is_login()
                 if not panel.is_displayed():
                     continue
-                #devname = self.driver.find_element(By.ID, f'devtxt{j}_{i}').text
                 self.logger.debug(f'open dev{j}_{i} info')
                 panel.click()
                 devname = self.driver.find_element(By.ID, 'form_ct_name').get_attribute('value')
@@ -175,7 +171,6 @@ class AirStationWebsite():
                 if len(buttons) < 2:
                     raise Exception('there is no return button')
                 buttons[1].click()
-            #all_devices.append(devices)
         return all_devices
 
     def save_device_list(self):
@@ -196,7 +191,6 @@ class AirStationWebsite():
             all_devices = [row for row in cobj]
         else:
             all_devices = self.save_device_list()
-            #all_devices = self.get_device_list()
 
         device_dict = {device[2]: device for device in all_devices}
         device_reverse_dict = {device[3]: device for device in all_devices}
