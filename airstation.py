@@ -143,9 +143,8 @@ class AirStationWebsite():
         '''
         self.logger.debug('get_device_list')
         self._kids_timer()
-        all_devices = []  # unknown, allow, deny, limit
+        all_devices = []  # flat list of unknown, allow, deny, limit
         for j in range(4):
-            devices = []
             for i in range(128):
                 try:
                     panel = self.driver.find_element(By.ID, f'dev{j}_{i}')
@@ -161,12 +160,12 @@ class AirStationWebsite():
                 panel.click()
                 devname = self.driver.find_element(By.ID, 'form_ct_name').get_attribute('value')
                 mac = self.driver.find_element(By.ID, 'form_ct_mac').get_attribute('value')
-                devices.append([i, f'dev{j}_{i}', devname, mac])
+                all_devices.append([i, f'dev{j}_{i}', devname, mac])
                 buttons = self.driver.find_elements(By.CSS_SELECTOR, '#devctrl_ct_setting > .button_area > .button2')
                 if len(buttons) < 2:
                     raise Exception('there is no return button')
                 buttons[1].click()
-            all_devices.append(devices)
+            #all_devices.append(devices)
         return all_devices
 
     def save_device_list(self):
@@ -175,8 +174,9 @@ class AirStationWebsite():
         devlist = self.get_device_list()
         with open(self.devlist, 'w') as fobj:
             cobj = csv.writer(fobj)
-            for devices in devlist:
-                cobj.writerows(devices)
+            cobj.writerows(devlist)
+            #for devices in devlist:
+            #    cobj.writerows(devices)
 
     def load_device_list(self):
         '''load devlist from file or AirStation config site
