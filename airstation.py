@@ -1,5 +1,6 @@
 from time import sleep
 import sys
+import re
 import os
 import csv
 
@@ -64,6 +65,15 @@ class AirStationWebsite():
         login_base = self.driver.find_elements(By.ID, 'login_base')
         self.logger.debug(f'login_base length is {len(login_base)}')
         return False if len(login_base) > 0 else True
+
+    def check_macaddr(self, macaddr):
+        '''check macaddr is a MAC address or not
+        '''
+        # MACアドレスの正規表現パターン
+        pattern = r'^([0-9A-Fa-f]{2}[:]){5}[0-9A-Fa-f]{2}$'
+        
+        # 正規表現で判定
+        return bool(re.match(pattern, macaddr))
 
     def login(self):
         '''login to Air Station Config site
@@ -177,6 +187,7 @@ class AirStationWebsite():
             cobj = csv.writer(fobj)
             for devices in devlist:
                 cobj.writerows(devices)
+        return devlist
 
     def load_device_list(self):
         '''load devlist from file or AirStation config site
@@ -186,7 +197,8 @@ class AirStationWebsite():
                 cobj = csv.reader(fobj.read().rstrip().splitlines())
             all_devices = [row for row in cobj]
         else:
-            all_devices = self.get_device_list()
+            all_devices = self.save_device_list()
+            #all_devices = self.get_device_list()
 
         device_dict = {device[2]: device for device in all_devices}
         device_reverse_dict = {device[3]: device for device in all_devices}
@@ -253,10 +265,11 @@ class AirStationWebsite():
     def add_mac_addr(self, macaddr):
         '''add device mac addr
         '''
+        if not self.check_macaddr(macaddr):
+            raise Exception(f'{macaddr} is not MAC address')
         registered_list = self.get_registered_devices()  # to check dupplicate
         if macaddr in registered_list:
-            self.logger.debug(f'{macaddr} has been already registered')
-            return
+            raise Exception(f'{macaddr} has been already registered')
         else:
             self.logger.debug(f'{macaddr} is not registered')
         self.logger.info('push edit button')
@@ -272,17 +285,19 @@ class AirStationWebsite():
         button.click()
         sleep(5)
         self.driver.switch_to.parent_frame()
+        return True
 
     def del_mac_addr(self, macaddr):
         '''del device mac addr
         '''
+        if not self.check_macaddr(macaddr):
+            raise Exception(f'{macaddr} is not MAC address')
         registered_list = self.get_registered_devices()  # to check dupplicate
         if macaddr in registered_list:
-            self.logger.debug(f'{macaddr} has been already registered')
+            self.logger.debug(f'{macaddr} has been registered')
             idx = registered_list.index(macaddr)
         else:
-            self.logger.debug(f'{macaddr} is not registered')
-            return
+            raise Exception(f'{macaddr} is not registered')
         self.logger.info('push edit button')
         iframe = self.driver.find_element(By.ID, 'content_main')
         self.driver.switch_to.frame(iframe)
@@ -300,11 +315,12 @@ class AirStationWebsite():
             else:
                 raise Exception(f'{macaddr} button is strange!!!')
         else:
-            self.logger.warning(f'{macaddr} is not found in edit page')
-            buttons = self.driver.find_elements(By.CSS_SELECTOR, f'#id_reg_list > tbody > tr > td > input')
-            for button in buttons:
-                self.logger.warning(button.get_attribute('value'))
+            raise Exception(f'{macaddr} is not found in edit page')
+            #buttons = self.driver.find_elements(By.CSS_SELECTOR, f'#id_reg_list > tbody > tr > td > input')
+            #for button in buttons:
+            #    self.logger.warning(button.get_attribute('value'))
         self.driver.switch_to.parent_frame()
+        return True
 
     def add_device(self, devname):
         '''add devname from mac addr config
@@ -312,11 +328,10 @@ class AirStationWebsite():
         if self.device_dict is None:
             self.load_device_list()
         if devname not in self.device_dict:
-            self.logger.info(f'device {devname} is not found in device list')
-            return
+            raise Exception(f'device {devname} is not found in device list')
         else:
             macaddr = self.device_dict[devname][3]
-        self.add_mac_addr(macaddr)
+        return self.add_mac_addr(macaddr)
 
     def del_device(self, devname):
         '''del devname from mac addr config
@@ -324,11 +339,10 @@ class AirStationWebsite():
         if self.device_dict is None:
             self.load_device_list()
         if devname not in self.device_dict:
-            self.logger.info(f'device {devname} is not found in device list')
-            return
+            raise Exception(f'device {devname} is not found in device list')
         else:
             macaddr = self.device_dict[devname][3]
-        self.del_mac_addr(macaddr)
+        return self.del_mac_addr(macaddr)
 
     def screenshot(self, filename):
         '''for debug, save screenshot now
