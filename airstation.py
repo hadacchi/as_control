@@ -15,15 +15,7 @@ from selenium.webdriver.common.by import By
 import toml
 
 # make logger
-#loglevel = logging.DEBUG
-loglevel = logging.INFO
-formatter = logging.Formatter('%(asctime)s %(module)s: %(levelname)s: %(message)s')
-
-logger = logging.getLogger()
-logger.setLevel(loglevel)
-handler = logging.StreamHandler(sys.stderr)
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+logger = logging.getLogger(__name__)
 
 config = 'config.toml'
 

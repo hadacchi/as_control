@@ -1,0 +1,7 @@
+[AirStation]
+username = 'admin'
+password = 'PASSWORD'
+url = 'http://{address_to_AirStation_login_page}/login.html'
+
+[Devices]
+devlist = 'device.csv'
