@@ -17,13 +17,13 @@ import toml
 # make logger
 logger = logging.getLogger(__name__)
 
-config = 'config.toml'
+configfile = 'config.toml'
 
 class AirStationWebsite():
     labels = ['unknown', 'allow', 'deny', 'limit']
 
-    def __init__(self, config, logger=logger):
-        tomlobj = toml.load(config)
+    def __init__(self, configfile, logger=logger):
+        tomlobj = toml.load(configfile)
         self.config = tomlobj['AirStation']
         self.devlist = tomlobj['Devices']['devlist']
         self.logger = logger
@@ -340,6 +340,6 @@ class AirStationWebsite():
             self.driver.quit()
 
 if __name__ == '__main__':
-    ASsite = AirStationWebsite(config, logger)
+    ASsite = AirStationWebsite(configfile, logger)
     ASsite.save_device_list()
     ASsite.exit()

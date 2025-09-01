@@ -21,11 +21,11 @@ SUBCOMMANDS = ['devices', 'del', 'add', 'delmac', 'addmac']
 def run_internal(attrs, say, config):
     '''
     @BOTNAME ap
-        devices
-        del DEVNAME
-        add DEVNAME
-        delmac MACADDR
-        addmac MACADDR
+        devices           登録済デバイスのMACアドレスのリストを取得
+        del DEVNAME       デバイスリストのうち削除するデバイスを指定
+        add DEVNAME       デバイスリストのうち追加するデバイスを指定
+        delmac MACADDR    削除するデバイスのMACアドレスを直接指定
+        addmac MACADDR    追加するデバイスのMACアドレスを直接指定
     '''
 
     logger.info(f'ap runs: {attrs}')
