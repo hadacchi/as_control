@@ -17,8 +17,9 @@ Example:
 logger = logging.getLogger(__name__)
 
 SUBCOMMANDS = ['devices', 'del', 'add', 'delmac', 'addmac']
+CONFIG_FILE = 'ap_config.toml'
 
-def run_internal(attrs, bot_client, message, config):
+def run_internal(attrs, bot_client, channel_id):
     '''
     @BOTNAME ap
         devices           登録済デバイスのMACアドレスのリストを取得
@@ -29,9 +30,6 @@ def run_internal(attrs, bot_client, message, config):
     '''
 
     logger.info(f'ap runs: {attrs}')
-    ap_config_file = config['config_file']
-
-    channel_id = message['channel']
 
     if attrs is None:
         logger.error('This plugin requires SUBCOMMAND.')
@@ -50,7 +48,7 @@ def run_internal(attrs, bot_client, message, config):
 
     if subcommand == 'devices':
         # デバイスリストを返却する処理
-        ASsite = AirStationWebsite(ap_config_file)
+        ASsite = AirStationWebsite(CONFIG_FILE)
         try:
             devices = ASsite.get_registered_devices()
             bot_client.chat_postMessage(channel=channel_id, text=str(devices))
@@ -60,7 +58,7 @@ def run_internal(attrs, bot_client, message, config):
         ASsite.exit()
     elif subcommand == 'delmac':
         # del macaddr
-        ASsite = AirStationWebsite(ap_config_file)
+        ASsite = AirStationWebsite(CONFIG_FILE)
         try:
             if ASsite.del_mac_addr(attrs[1]):
                 bot_client.chat_postMessage(channel=channel_id, text=msgs.finish())
@@ -73,7 +71,7 @@ def run_internal(attrs, bot_client, message, config):
         ASsite.exit()
     elif subcommand == 'addmac':
         # add macaddr
-        ASsite = AirStationWebsite(ap_config_file)
+        ASsite = AirStationWebsite(CONFIG_FILE)
         try:
             if ASsite.add_mac_addr(attrs[1]):
                 bot_client.chat_postMessage(channel=channel_id, text=msgs.finish())
@@ -86,7 +84,7 @@ def run_internal(attrs, bot_client, message, config):
         ASsite.exit()
     elif match.find('del') >= 0:
         # del device
-        ASsite = AirStationWebsite(ap_config_file)
+        ASsite = AirStationWebsite(CONFIG_FILE)
         try:
             if ASsite.del_device(' '.join(attrs[1:])):
                 bot_client.chat_postMessage(channel=channel_id, text=msgs.finish())
@@ -99,7 +97,7 @@ def run_internal(attrs, bot_client, message, config):
         ASsite.exit()
     elif match.find('add') >= 0:
         # add device
-        ASsite = AirStationWebsite(ap_config_file)
+        ASsite = AirStationWebsite(CONFIG_FILE)
         try:
             if ASsite.add_device(' '.join(attrs[1:])):
                 bot_client.chat_postMessage(channel=channel_id, text=msgs.finish())
